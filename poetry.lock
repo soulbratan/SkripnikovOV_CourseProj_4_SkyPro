@@ -206,6 +206,40 @@ files = [
 markers = {main = "sys_platform == \"win32\"", lint = "platform_system == \"Windows\""}
 
 [[package]]
+name = "confusable-homoglyphs"
+version = "3.3.1"
+description = "Detect confusable usage of unicode homoglyphs, prevent homograph attacks."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "confusable_homoglyphs-3.3.1-py2.py3-none-any.whl", hash = "sha256:84c92cb79dc7f55aa290d0762b2349abd8dee4c16fbe6f99eac978d394e2e6a1"},
+    {file = "confusable_homoglyphs-3.3.1.tar.gz", hash = "sha256:b995001c9b2e1b4cea0cf5f3840a7c79188a8cbbad053d693572bd8c1c1ec460"},
+]
+
+[package.extras]
+cli = ["click"]
+
+[[package]]
+name = "crispy-bootstrap5"
+version = "0.7"
+description = "Bootstrap5 template pack for django-crispy-forms"
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+files = [
+    {file = "crispy-bootstrap5-0.7.tar.gz", hash = "sha256:0745a67199619149b7feca87dab7a45664876ed50fb582b38fd2aeb3f8a8d869"},
+    {file = "crispy_bootstrap5-0.7-py3-none-any.whl", hash = "sha256:f3ff1ef5cb379fe80b1b02e245008f276444098a4bdb8d855bed84c623798a85"},
+]
+
+[package.dependencies]
+django = ">=3.2"
+django-crispy-forms = ">=1.13.0"
+
+[package.extras]
+test = ["pytest", "pytest-django"]
+
+[[package]]
 name = "decorator"
 version = "5.2.1"
 description = "Decorators for Humans"
@@ -237,6 +271,41 @@ tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 [package.extras]
 argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
+
+[[package]]
+name = "django-crispy-forms"
+version = "2.0"
+description = "Best way to have Django DRY forms"
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+files = [
+    {file = "django-crispy-forms-2.0.tar.gz", hash = "sha256:90193b068bf948d9c68449bc8260afed1a8e2afe11ee0bac8c4ebfaeb175b322"},
+    {file = "django_crispy_forms-2.0-py3-none-any.whl", hash = "sha256:d1d4e585929058a9ab3b797666ea5b69320b9ba7937f9d146d32173246a6fd13"},
+]
+
+[package.dependencies]
+django = ">=3.2"
+
+[[package]]
+name = "django-registration"
+version = "3.4"
+description = "An extensible user-registration application for Django."
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+files = [
+    {file = "django-registration-3.4.tar.gz", hash = "sha256:1a0ccef7ef71e67a78a551abd8ad378977dc14a036f1fcd8be422a68bd5254a9"},
+    {file = "django_registration-3.4-py3-none-any.whl", hash = "sha256:fa76df481189794f47eb73043ee5cc9bfb0963194b901d7bd8cf914beab1ddd0"},
+]
+
+[package.dependencies]
+confusable-homoglyphs = ">=3.0,<4.0"
+Django = ">=3.2,<4.0.dev0 || >=4.1.dev0"
+
+[package.extras]
+docs = ["furo", "sphinx", "sphinx-copybutton", "sphinx-inline-tabs", "sphinx-notfound-page", "sphinxcontrib-django", "sphinxext-opengraph"]
+tests = ["coverage", "tomli ; python_full_version < \"3.11.0a7\""]
 
 [[package]]
 name = "executing"
@@ -989,4 +1058,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "73a615bb04945dc499b2ff92fc6da6c68c1ac4f8d5a47a61dd1ea71be48b3079"
+content-hash = "0af220eb6262bf98665af303139b846517623d122a4bcb8c3fe4a266f7ad72c1"
