@@ -1,0 +1,31 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}Удаление сообщения - Система рассылок{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h3>🗑️ Удаление сообщения</h3>
+            </div>
+            <div class="card-body">
+                <p>Вы уверены, что хотите удалить сообщение <strong>"{{ object.subject }}"</strong>?</p>
+                <p class="text-muted">{{ object.body|truncatewords:10 }}</p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'mailings:message_list' %}" class="btn btn-secondary me-md-2">
+                            ↩️ Отмена
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            🗑️ Удалить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

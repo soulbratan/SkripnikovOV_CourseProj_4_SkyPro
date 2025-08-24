@@ -125,3 +125,8 @@ STATIC_URL = "static/"
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+LOGIN_REDIRECT_URL = 'mailings:index'  # Перенаправление после входа
+LOGOUT_REDIRECT_URL = 'mailings:index'  # Перенаправление после выхода
+LOGIN_URL = 'login'  # URL для входа

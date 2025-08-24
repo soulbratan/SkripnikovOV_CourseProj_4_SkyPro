@@ -1,0 +1,72 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}Рассылки - Система рассылок{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📤 Управление рассылками</h2>
+    <a href="{% url 'mailings:mailing_create' %}" class="btn btn-primary">
+        🚀 Создать рассылку
+    </a>
+</div>
+
+{% if mailings %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Сообщение</th>
+                <th>Статус</th>
+                <th>Начало</th>
+                <th>Окончание</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mailing in mailings %}
+            <tr>
+                <td>{{ mailing.id }}</td>
+                <td>{{ mailing.message.subject }}</td>
+                <td>
+                    <span class="badge 
+                        {% if mailing.status == 'started' %}bg-success
+                        {% elif mailing.status == 'completed' %}bg-secondary
+                        {% elif mailing.status == 'disabled' %}bg-warning
+                        {% else %}bg-info{% endif %}">
+                        {{ mailing.get_status_display }}
+                    </span>
+                </td>
+                <td>{{ mailing.start_time|date:"d.m.Y H:i" }}</td>
+                <td>{{ mailing.end_time|date:"d.m.Y H:i" }}</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{% url 'mailings:mailing_detail' mailing.pk %}" class="btn btn-outline-info">
+                            👁️
+                        </a>
+                        <a href="{% url 'mailings:mailing_edit' mailing.pk %}" class="btn btn-outline-primary">
+                            ✏️
+                        </a>
+                        <a href="{% url 'mailings:mailing_delete' mailing.pk %}" class="btn btn-outline-danger">
+                            🗑️
+                        </a>
+                        {% if mailing.status == 'started' %}
+                        <a href="{% url 'mailings:send_mailing' mailing.pk %}" class="btn btn-outline-success">
+                            🚀
+                        </a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">
+    <h4>Рассылки не найдены</h4>
+    <p>У вас пока нет созданных рассылок. Создайте первую рассылку.</p>
+    <a href="{% url 'mailings:mailing_create' %}" class="btn btn-info">Создать рассылку</a>
+</div>
+{% endif %}
+{% endblock %}

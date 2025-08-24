@@ -1,0 +1,38 @@
+{% extends 'mailings/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {% if object %}Редактирование рассылки{% else %}Создание рассылки{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    {% if object %}
+                    ✏️ Редактирование рассылки
+                    {% else %}
+                    📤 Создание рассылки
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'mailings:mailing_list' %}" class="btn btn-secondary me-md-2">
+                            ↩️ Назад к списку
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            💾 Сохранить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

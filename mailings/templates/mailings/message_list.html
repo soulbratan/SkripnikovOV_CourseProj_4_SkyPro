@@ -1,0 +1,45 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}Сообщения - Система рассылок{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>✉️ Управление сообщениями</h2>
+    <a href="{% url 'mailings:message_create' %}" class="btn btn-primary">
+        ✏️ Создать сообщение
+    </a>
+</div>
+
+{% if messages %}
+<div class="row">
+    {% for message in messages %}
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title">{{ message.subject }}</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ message.body|truncatewords:20 }}</p>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group btn-group-sm">
+                    <a href="{% url 'mailings:message_edit' message.pk %}" class="btn btn-outline-primary">
+                        ✏️ Редактировать
+                    </a>
+                    <a href="{% url 'mailings:message_delete' message.pk %}" class="btn btn-outline-danger">
+                        🗑️ Удалить
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <h4>Сообщения не найдены</h4>
+    <p>У вас пока нет созданных сообщений. Создайте первое сообщение для рассылок.</p>
+    <a href="{% url 'mailings:message_create' %}" class="btn btn-info">Создать сообщение</a>
+</div>
+{% endif %}
+{% endblock %}

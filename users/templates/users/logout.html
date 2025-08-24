@@ -1,0 +1,26 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}Выход - Система рассылок{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">🚪 Выход из системы</h3>
+            </div>
+            <div class="card-body text-center">
+                <p>Вы уверены, что хотите выйти?</p>
+                
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">Да, выйти</button>
+                        <a href="{% url 'mailings:index' %}" class="btn btn-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

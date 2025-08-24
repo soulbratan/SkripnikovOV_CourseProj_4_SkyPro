@@ -1,0 +1,145 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}Статистика - Система рассылок{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">📈 Статистика рассылок</h2>
+        
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card text-center h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Всего рассылок</h5>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-text display-4">{{ mailing_stats.total }}</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card text-center h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">Активные</h5>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-text display-4">{{ mailing_stats.active }}</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card text-center h-100">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="card-title mb-0">Завершенные</h5>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-text display-4">{{ mailing_stats.completed }}</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card text-center h-100">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="card-title mb-0">Созданные</h5>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-text display-4">{{ mailing_stats.created }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card text-center h-100">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="card-title mb-0">Всего попыток</h5>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-text display-4">{{ attempt_stats.total }}</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card text-center h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">Успешных</h5>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-text display-4">{{ attempt_stats.success }}</h2>
+                        <p class="mb-0">
+                            {% if attempt_stats.total > 0 %}
+                            {{ attempt_stats.success|floatformat:0 }}% успеха
+                            {% else %}
+                            0% успеха
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card text-center h-100">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="card-title mb-0">Неуспешных</h5>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-text display-4">{{ attempt_stats.failed }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Топ-5 рассылок по количеству попыток</h5>
+            </div>
+            <div class="card-body">
+                {% if top_mailings %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Сообщение</th>
+                                <th>Статус</th>
+                                <th>Попыток</th>
+                                <th>Успешных</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for mailing in top_mailings %}
+                            <tr>
+                                <td>#{{ mailing.id }}</td>
+                                <td>{{ mailing.message.subject }}</td>
+                                <td>
+                                    <span class="badge 
+                                        {% if mailing.status == 'started' %}bg-success
+                                        {% elif mailing.status == 'completed' %}bg-secondary
+                                        {% elif mailing.status == 'disabled' %}bg-warning
+                                        {% else %}bg-info{% endif %}">
+                                        {{ mailing.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>{{ mailing.attempt_count }}</td>
+                                <td>
+                                    {% widthratio mailing.success_attempts mailing.attempt_count 100 %}%
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">Нет данных для отображения</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
