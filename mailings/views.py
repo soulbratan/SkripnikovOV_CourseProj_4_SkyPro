@@ -292,7 +292,7 @@ def send_mailing_now(request, pk):
                 send_mail(
                     mailing.message.subject,
                     mailing.message.body,
-                    'noreply@mailingservice.com',
+                    'pochtoviyserversov@yandex.ru',
                     [client.email],
                     fail_silently=False,
                 )

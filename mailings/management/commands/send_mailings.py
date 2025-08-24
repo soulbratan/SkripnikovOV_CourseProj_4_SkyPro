@@ -22,7 +22,7 @@ class Command(BaseCommand):
                 success = send_mail(
                     mailing.message.subject,
                     mailing.message.body,
-                    'noreply@example.com',
+                    'pochtoviyserversov@yandex.ru',
                     [client.email],
                     fail_silently=False,
                 )
