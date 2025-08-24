@@ -138,9 +138,8 @@ class MailingListView(OwnerOrManagerMixin, ListView):
 
 
 class MailingCreateView(LoginRequiredMixin, CreateView):
-    """Создание рассылки"""
     model = Mailing
-    form_class = MailingForm
+    form_class = MailingForm  # Убедитесь что используете правильную форму
     template_name = 'mailings/mailing_form.html'
     success_url = reverse_lazy('mailings:mailing_list')
 
@@ -156,7 +155,6 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
 
 
 class MailingUpdateView(OwnerRequiredMixin, UpdateView):
-    """Редактирование рассылки"""
     model = Mailing
     form_class = MailingForm
     template_name = 'mailings/mailing_form.html'
