@@ -1,0 +1,52 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}Клиенты - Система рассылок{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>👥 Управление клиентами</h2>
+    <a href="{% url 'mailings:client_create' %}" class="btn btn-primary">
+        ➕ Добавить клиента
+    </a>
+</div>
+
+{% if clients %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Ф.И.О.</th>
+                <th>Email</th>
+                <th>Комментарий</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>{{ client.full_name }}</td>
+                <td>{{ client.email }}</td>
+                <td>{{ client.comment|truncatewords:10 }}</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{% url 'mailings:client_edit' client.pk %}" class="btn btn-outline-primary">
+                            ✏️
+                        </a>
+                        <a href="{% url 'mailings:client_delete' client.pk %}" class="btn btn-outline-danger">
+                            🗑️
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">
+    <h4>Клиенты не найдены</h4>
+    <p>У вас пока нет добавленных клиентов. Начните с добавления первого клиента.</p>
+    <a href="{% url 'mailings:client_create' %}" class="btn btn-info">Добавить клиента</a>
+</div>
+{% endif %}
+{% endblock %}

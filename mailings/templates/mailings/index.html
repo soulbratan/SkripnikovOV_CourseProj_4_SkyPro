@@ -1,0 +1,91 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}Главная - Система рассылок{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 text-center mb-4">
+        <h1 class="display-4">📧 Система управления рассылками</h1>
+        <p class="lead">Эффективное управление email-рассылками для вашего бизнеса</p>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-md-4 mb-3">
+        <div class="card text-center h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Всего рассылок</h5>
+            </div>
+            <div class="card-body">
+                <h2 class="card-text display-3">{{ total_mailings }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card text-center h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">Активные рассылки</h5>
+            </div>
+            <div class="card-body">
+                <h2 class="card-text display-3">{{ active_mailings }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card text-center h-100">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">Уникальные клиенты</h5>
+            </div>
+            <div class="card-body">
+                <h2 class="card-text display-3">{{ unique_clients }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if user.is_authenticated %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Быстрые действия</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{% url 'mailings:client_create' %}" class="btn btn-primary me-md-2">
+                        ➕ Добавить клиента
+                    </a>
+                    <a href="{% url 'mailings:message_create' %}" class="btn btn-success me-md-2">
+                        ✏️ Создать сообщение
+                    </a>
+                    <a href="{% url 'mailings:mailing_create' %}" class="btn btn-info">
+                        🚀 Начать рассылку
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Начните работу с системой</h4>
+            </div>
+            <div class="card-body text-center">
+                <p class="lead">Для доступа к функциям системы необходимо войти или зарегистрироваться</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{% url 'login' %}" class="btn btn-primary me-md-2">
+                        🔑 Войти в систему
+                    </a>
+                    <a href="{% url 'users:register' %}" class="btn btn-outline-primary">
+                        📝 Зарегистрироваться
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

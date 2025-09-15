@@ -1,0 +1,38 @@
+{% extends 'mailings/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Вход - Система рассылок{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">🔑 Вход в систему</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary w-100 mb-3">Войти</button>
+                </form>
+                
+                <div class="text-center">
+                    <a href="{% url 'password_reset' %}" class="text-decoration-none">
+                        Забыли пароль?
+                    </a>
+                </div>
+                
+                <hr>
+                
+                <div class="text-center">
+                    <p>Нет аккаунта?</p>
+                    <a href="{% url 'users:register' %}" class="btn btn-outline-primary">
+                        📝 Зарегистрироваться
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

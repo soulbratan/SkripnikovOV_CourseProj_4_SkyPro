@@ -1,0 +1,168 @@
+{% extends 'mailings/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if object %}Редактирование{% else %}Создание{% endif %} рассылки{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header">
+                <h4>
+                    {% if object %}
+                    ✏️ Редактирование рассылки
+                    {% else %}
+                    📤 Создание рассылки
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" id="mailingForm">
+                    {% csrf_token %}
+
+                    {% if not object %}
+                    <!-- Простой выбор времени для создания -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>⏰ Когда начать?</h5>
+                            {{ form.start_choice|as_crispy_field }}
+
+                            <div id="customStartDiv" style="display: none;" class="mt-2 p-3 border rounded">
+                                <label class="form-label fw-bold">Укажите дату и время начала:</label>
+                                {{ form.custom_start }}
+                                <small class="form-text text-muted">Выберите дату и время когда начать рассылку</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5>⏹️ Как долго?</h5>
+                            {{ form.duration_choice|as_crispy_field }}
+
+                            <div id="customEndDiv" style="display: none;" class="mt-2 p-3 border rounded">
+                                <label class="form-label fw-bold">Укажите дату и время окончания:</label>
+                                {{ form.custom_end }}
+                                <small class="form-text text-muted">Выберите дату и время когда закончить рассылку</small>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    {% else %}
+                    <!-- Для редактирования - обычные поля -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Начало:</label>
+                            <input type="datetime-local" class="form-control"
+                                   value="{{ object.start_time|date:'Y-m-d\TH:i' }}" disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Окончание:</label>
+                            <input type="datetime-local" class="form-control"
+                                   value="{{ object.end_time|date:'Y-m-d\TH:i' }}" disabled>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Основные поля -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.status|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.message|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            {{ form.clients|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'mailings:mailing_list' %}" class="btn btn-secondary me-md-2">
+                            ↩️ Назад
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            💾 Сохранить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if not object %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const startSelect = document.getElementById('id_start_choice');
+    const durationSelect = document.getElementById('id_duration_choice');
+    const customStartDiv = document.getElementById('customStartDiv');
+    const customEndDiv = document.getElementById('customEndDiv');
+    const customStartField = document.getElementById('id_custom_start');
+    const customEndField = document.getElementById('id_custom_end');
+
+    function updateCustomFields() {
+        // Показываем/скрываем кастомное поле времени начала
+        if (startSelect.value === 'custom') {
+            customStartDiv.style.display = 'block';
+            customStartField.required = true;
+        } else {
+            customStartDiv.style.display = 'none';
+            customStartField.required = false;
+            customStartField.value = ''; // Очищаем поле
+        }
+
+        // Показываем/скрываем кастомное поле времени окончания
+        if (durationSelect.value === 'custom') {
+            customEndDiv.style.display = 'block';
+            customEndField.required = true;
+        } else {
+            customEndDiv.style.display = 'none';
+            customEndField.required = false;
+            customEndField.value = ''; // Очищаем поле
+        }
+
+        // Устанавливаем минимальную дату для кастомных полей
+        const now = new Date();
+        const timezoneOffset = now.getTimezoneOffset() * 60000;
+        const localISOTime = new Date(now - timezoneOffset).toISOString().slice(0, 16);
+
+        customStartField.min = localISOTime;
+        customEndField.min = localISOTime;
+
+        // Если выбрано кастомное время начала, устанавливаем минимальное время для окончания
+        if (startSelect.value === 'custom' && customStartField.value) {
+            customEndField.min = customStartField.value;
+        }
+    }
+
+    // Слушаем изменения в выпадающих списках
+    startSelect.addEventListener('change', updateCustomFields);
+    durationSelect.addEventListener('change', updateCustomFields);
+
+    // Слушаем изменения в кастомных полях времени
+    customStartField.addEventListener('change', function() {
+        if (this.value) {
+            customEndField.min = this.value;
+        }
+    });
+
+    // Инициализация при загрузке
+    updateCustomFields();
+
+    // Устанавливаем текущее время по умолчанию для кастомных полей
+    const now = new Date();
+    const timezoneOffset = now.getTimezoneOffset() * 60000;
+    const localISOTime = new Date(now - timezoneOffset).toISOString().slice(0, 16);
+
+    // Устанавливаем значения по умолчанию (через 1 час от текущего времени)
+    const defaultStartTime = new Date(now.getTime() + 60 * 60 * 1000 - timezoneOffset).toISOString().slice(0, 16);
+    const defaultEndTime = new Date(now.getTime() + 24 * 60 * 60 * 1000 - timezoneOffset).toISOString().slice(0, 16);
+
+    customStartField.value = defaultStartTime;
+    customEndField.value = defaultEndTime;
+});
+</script>
+{% endif %}
+{% endblock %}
