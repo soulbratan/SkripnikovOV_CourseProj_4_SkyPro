@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.core.mail import send_mail
 
-
+import config.settings
 from .models import Client, Message, Mailing, MailingAttempt
 from .forms import ClientForm, MessageForm, MailingForm
 from .mixins import OwnerRequiredMixin, ManagerRequiredMixin, OwnerOrManagerMixin
@@ -290,7 +290,7 @@ def send_mailing_now(request, pk):
                 send_mail(
                     mailing.message.subject,
                     mailing.message.body,
-                    'pochtoviyserversov@yandex.ru',
+                    config.settings.EMAIL_HOST_USER,
                     [client.email],
                     fail_silently=False,
                 )

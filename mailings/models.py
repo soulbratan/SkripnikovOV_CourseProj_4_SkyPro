@@ -9,11 +9,27 @@ class Client(models.Model):
     comment = models.TextField(_('Comment'), blank=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = "Клиент"
+        verbose_name_plural = "Клиенты"
+        ordering = ["full_name"]
+
+    def __str__(self):
+        return self.email
+
 
 class Message(models.Model):
     subject = models.CharField(_('Subject'), max_length=255)
     body = models.TextField(_('Body'))
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Сообщение"
+        verbose_name_plural = "Сообщения"
+        ordering = ["owner"]
+
+    def __str__(self):
+        return self.subject
 
 
 class Mailing(models.Model):
@@ -31,6 +47,14 @@ class Mailing(models.Model):
     clients = models.ManyToManyField(Client)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = "Рассылка"
+        verbose_name_plural = "Рассылки"
+        ordering = ["owner"]
+
+    def __str__(self):
+        return self.clients
+
 
 class MailingAttempt(models.Model):
     STATUS_CHOICES = [
@@ -42,3 +66,12 @@ class MailingAttempt(models.Model):
     status = models.CharField(_('Status'), max_length=7, choices=STATUS_CHOICES)
     server_response = models.TextField(_('Server response'), blank=True)
     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE)
+
+
+    class Meta:
+        verbose_name = "Попытка"
+        verbose_name_plural = "Попытки"
+        ordering = ["attempt_time"]
+
+    def __str__(self):
+        return self.mailing
